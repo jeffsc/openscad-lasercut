@@ -1,3 +1,4 @@
+// requires https://github.com/bmsleight/lasercut
 include <lasercut/lasercut.scad>
 
 START_TAB=0;
