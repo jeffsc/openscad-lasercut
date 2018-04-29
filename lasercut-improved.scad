@@ -147,13 +147,13 @@ module lasercutBox(width=0, height=0, depth=0, thickness=0, kerf=0, empty_sides=
                             side_offset=ratioLocation(v, width, thickness)-start_loc) : []]])),
             cutouts=(start_div > len(v_dividers)+end_div-1) ? [] :
                 // Add intersection slots of dividers only if they intersect
-                flatten([for (vi=[start_div : len(v_dividers)+end_div-1]) let(v=v_dividers[vi])
+                flatten([for (vi=[start_div : max(start_div, len(v_dividers)+end_div-1)]) let(v=v_dividers[vi])
                 [v[1] <= i && len(h_dividers)+v[2] > i ?
                 intersectionSlot(total_width=width, total_height=depth, thickness=thickness, direction=DOWN,
                     start_offset=start_loc, location=v[0]) : []]])
         );
     };
-    for (hi=[0: len(h_dividers)-1]) let (h = h_dividers[hi])
+    for (hi=[0: max(0, len(h_dividers)-1)]) let (h = h_dividers[hi])
     { horizDivider(h[0], h[1], h[2], hi); }
 
     module vertDivider(div_loc, start_div, end_div, i) {
@@ -173,7 +173,7 @@ module lasercutBox(width=0, height=0, depth=0, thickness=0, kerf=0, empty_sides=
                     h_dividers[end_div+len(h_dividers)][2]+len(v_dividers) > i) ?
                     tab(RIGHT, SLOT, d_tabs) : []],
                 // Check if horizontal dividers start/end here
-                flatten([for(j=[0:len(h_dividers)-1]) let(h=h_dividers[j])
+                flatten([for(j=[0:max(0, len(h_dividers)-1)]) let(h=h_dividers[j])
                     [h[1]-1 == i && j != start_div-1 &&
                             j != end_div+len(h_dividers) ||
                         h[2]+len(v_dividers) == i && j != start_div-1 &&
@@ -188,7 +188,7 @@ module lasercutBox(width=0, height=0, depth=0, thickness=0, kerf=0, empty_sides=
                     start_offset=start_loc, location=h[0]) : []]])
         );
     };
-    for (vi=[0: len(v_dividers)-1]) let (v = v_dividers[vi])
+    for (vi=[0: max(0, len(v_dividers)-1)]) let (v = v_dividers[vi])
     { vertDivider(v[0], v[1], v[2], vi); }
 };
 
