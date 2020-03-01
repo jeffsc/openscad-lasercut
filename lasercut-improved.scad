@@ -419,7 +419,8 @@ function slotDepth(thickness=0, kerf=0) = thickness - kerf;
 
 function tabCount(w) = min(max(floor((w/tab_size+1)/2), min_tabs), max_tabs);
 function totalTabs(num_t=0, x=0, tab_width=0) =
-    (num_t > 1 ? num_t : (x/tab_width+1)/2+1) - 2;
+    // Apparently in some edge-cases this is not exactly an integer; which can cause for loops to miss the last tab
+    round((num_t > 1 ? num_t : (x/tab_width+1)/2+1) - 2);
 function tabWidth(total_w = 0, num_t = 0) = total_w/(num_t*2 - 1);
 
 function flatten(l) = [ for (a = l) for (b = a) b ] ;
